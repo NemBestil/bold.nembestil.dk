@@ -1,0 +1,13 @@
+import {describe,expect,it} from 'vitest';
+import {computerAssignments} from '../shared/matchSettings';
+import {INITIAL_MATCH} from '../shared/types';
+import {isClientEnvelope} from '../network/MessageProtocol';
+import {session,now} from './helpers/seatSession';
+describe('automatic computer positions',()=>{
+  it.each(['red','blue'] as const)('fills only the unused half of %s',team=>{const {manager,join}=session();const player=join(team,'attack');expect(manager.state.players.find(p=>p.id===player.playerId)?.rodIds).toEqual([2,3]);expect(computerAssignments(manager.state.settings).find(p=>p.team===team)?.rodIds).toEqual([0,1]);});
+  it('gives vacant halves individual difficulty levels',()=>{const {manager,join}=session();const player=join('red');expect(manager.handle(player.playerId,{type:'set-computer-level',team:'blue',role:'attack',level:'advanced'},now).ok).toBe(true);expect(computerAssignments(manager.state.settings).filter(p=>p.team==='blue')).toEqual([{team:'blue',level:'beginner',rodIds:[0,1]},{team:'blue',level:'advanced',rodIds:[2,3]}]);});
+  it('does not expose computer settings on human positions or alter their rods',()=>{const {manager,join}=session();const first=join('red'),second=join('red','attack');expect(manager.handle(second.playerId,{type:'set-computer-level',team:'red',role:'defense',level:'advanced'},now).code).toBe('human-seat');expect(computerAssignments(manager.state.settings).some(p=>p.team==='red')).toBe(false);});
+  it('lets a waiting controller choose a computer level but reserves rules for the admin',()=>{const {manager,join}=session();join('red');const second=join('blue');expect(manager.handle(second.playerId,{type:'set-computer-level',team:'blue',role:'attack',level:'normal'},now).ok).toBe(true);expect(manager.handle(second.playerId,{type:'update-settings',settings:{bumpStrength:.2}},now).code).toBe('admin-only');});
+  it('limits live difficulty edits to pauses',()=>{const {manager,join,start}=session();const player=join('red');start(player);manager.setMatch({...structuredClone(INITIAL_MATCH),phase:'playing'});const command={type:'set-computer-level',team:'blue',role:'attack',level:'advanced'};expect(manager.handle(player.playerId,command,now).code).toBe('locked');manager.handle(player.playerId,{type:'pause',paused:true},now);expect(manager.handle(player.playerId,command,now).ok).toBe(true);});
+  it.each([{type:'reserve-seat',team:'green',role:'attack'},{type:'reserve-seat',team:'red',role:'all'},{type:'set-computer-level',team:'red',role:'attack',level:'expert'},{type:'update-settings',settings:{bumpEnabled:false}},{type:'update-settings',settings:{stuckDuration:2}}])('rejects invalid or removed controls: %j',message=>expect(isClientEnvelope(message)).toBe(false));
+});

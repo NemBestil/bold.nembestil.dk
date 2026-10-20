@@ -1,0 +1,76 @@
+{
+  "scope": "Same browser/machine, real WebRTC, last 10 seconds; not a phone benchmark",
+  "status": "connected",
+  "phase": "countdown",
+  "stateMessages": 368,
+  "hostReceivedInputs": 13,
+  "controllerSentInputs": 38,
+  "pauseRequests": 2,
+  "pauseAcks": 2,
+  "arrival": {
+    "count": 599,
+    "meanMs": 16.7,
+    "p95Ms": 21.4,
+    "maxMs": 39.6,
+    "over25ms": 3
+  },
+  "hostTick": {
+    "count": 596,
+    "meanMs": 16.71,
+    "p95Ms": 21.2,
+    "maxMs": 39,
+    "over25ms": 3
+  },
+  "frameAgeSameClock": {
+    "count": 599,
+    "meanMs": 1.32,
+    "p95Ms": 2,
+    "maxMs": 7,
+    "over25ms": 0
+  },
+  "raf": {
+    "count": 1436,
+    "meanMs": 6.96,
+    "p95Ms": 7.7,
+    "maxMs": 20.8,
+    "over25ms": 0
+  },
+  "controllerSceneRenderCpu": {
+    "count": 1436,
+    "meanMs": 0.91,
+    "p95Ms": 1.4,
+    "maxMs": 5.5,
+    "over25ms": 0
+  },
+  "stale": false,
+  "staleWindowStarts": 0,
+  "pcState": "connected",
+  "channels": [
+    {
+      "id": 1,
+      "label": "nemfuss-v2",
+      "state": "open",
+      "messagesReceived": 399,
+      "messagesSent": 71,
+      "bytesReceived": 446955,
+      "bytesSent": 4776
+    },
+    {
+      "id": 2,
+      "label": "nemfuss-visual-v1",
+      "state": "open",
+      "messagesReceived": 3620,
+      "messagesSent": 1,
+      "bytesReceived": 3731823,
+      "bytesSent": 23
+    }
+  ],
+  "selectedPair": {
+    "state": "succeeded",
+    "nominated": true,
+    "rttMs": 0,
+    "localType": "host",
+    "remoteType": "host",
+    "protocol": "udp"
+  }
+}

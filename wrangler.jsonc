@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "nemfuss",
+  "pages_build_output_dir": "./.output/public",
+  "compatibility_date": "2026-10-17",
+  "vars": {
+    "TURN_KEY_ID": "14e58dced348a12f40d7f24e9da69f3c"
+  }
+}

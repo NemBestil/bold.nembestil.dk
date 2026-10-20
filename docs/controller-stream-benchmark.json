@@ -1,0 +1,2019 @@
+{
+  "kind": "synthetic-controller-stream-benchmark",
+  "physicalPhoneMeasurement": false,
+  "reproduce": "npx tsx scripts/benchmark-controller-stream.ts",
+  "methodology": {
+    "bufferImplementation": "network/TableFrameBuffer.ts",
+    "controllerOptionsSource": "network/TableFrameBuffer.ts#CONTROLLER_FRAME_BUFFER_OPTIONS",
+    "controllerOptions": {
+      "smoothClock": true,
+      "interpolationDelay": 25,
+      "interpolateBall": true
+    },
+    "modes": [
+      {
+        "name": "legacy-30hz-raw-ball",
+        "streamHz": 30,
+        "exactSnapshotPlayout": false,
+        "options": {
+          "smoothClock": true,
+          "interpolationDelay": 25,
+          "interpolateBall": false
+        }
+      },
+      {
+        "name": "60hz-raw-ball",
+        "streamHz": 60,
+        "exactSnapshotPlayout": false,
+        "options": {
+          "smoothClock": true,
+          "interpolationDelay": 25,
+          "interpolateBall": false
+        }
+      },
+      {
+        "name": "current-60hz-host-interpolation-25ms",
+        "streamHz": 60,
+        "exactSnapshotPlayout": false,
+        "options": {
+          "smoothClock": true,
+          "interpolationDelay": 25,
+          "interpolateBall": true
+        }
+      },
+      {
+        "name": "candidate-60hz-exact-snapshot-playout-25ms",
+        "streamHz": 60,
+        "exactSnapshotPlayout": true,
+        "options": {
+          "smoothClock": true,
+          "interpolationDelay": 25,
+          "interpolateBall": true
+        }
+      }
+    ],
+    "displayHz": 60,
+    "speedMetersPerSecond": 6,
+    "durationMs": 6000,
+    "measurementStartMs": 1000,
+    "packetGap": {
+      "startMs": 3000,
+      "durationMs": 50
+    },
+    "notes": [
+      "This deterministic event simulation does not measure WebRTC, Wi-Fi, browser work, GPU load, RAF jitter, or a physical phone.",
+      "Base latency is one-way and jitter is symmetric deterministic variation around that base, so effective delay ranges from 2 to 33 ms.",
+      "The trajectory is a constant-speed straight line, deliberately without collisions; coordinates remain inside protocol bounds but are not confined to a physical table.",
+      "biggestInputGapMs measures accepted visual snapshot arrival gaps; control input delivery is not simulated.",
+      "distinctDisplayedPoses counts consecutive changed ball positions, repeats counts unchanged positions on subsequent display frames.",
+      "hostBallTimestampAgeMs derives from the displayed ball path, because raw-ball mode intentionally replaces the ball without replacing interpolated rod timestamps.",
+      "The candidate only uses existing interpolation between real host snapshots; it is a comparison configuration, not a gameplay or algorithm change.",
+      "Exact-snapshot playout is a benchmark-only selector: it takes the actual TableFrameBuffer playhead and chooses the last received host snapshot at or before that time, without interpolating its ball position.",
+      "Warm-up is excluded. No clock offset is introduced because source and receive event clocks share a synthetic epoch."
+    ]
+  },
+  "aggregate": [
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "repeatPercentWithoutGap": {
+        "mean": 49.834,
+        "p50": 49.834,
+        "p95": 49.834,
+        "max": 49.834
+      },
+      "maxStepMetersWithoutGap": 0.2,
+      "maxStepMetersWithGap": 0.6,
+      "meanHostBallAgeMs": {
+        "mean": 34.736,
+        "p50": 35.327,
+        "p95": 41.639,
+        "max": 41.639
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "repeatPercentWithoutGap": {
+        "mean": 5.759,
+        "p50": 0,
+        "p95": 22.259,
+        "max": 22.259
+      },
+      "maxStepMetersWithoutGap": 0.2,
+      "maxStepMetersWithGap": 0.4,
+      "meanHostBallAgeMs": {
+        "mean": 26.32,
+        "p50": 26.744,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "repeatPercentWithoutGap": {
+        "mean": 0,
+        "p50": 0,
+        "p95": 0,
+        "max": 0
+      },
+      "maxStepMetersWithoutGap": 0.107,
+      "maxStepMetersWithGap": 0.115,
+      "meanHostBallAgeMs": {
+        "mean": 42.133,
+        "p50": 41.811,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "repeatPercentWithoutGap": {
+        "mean": 2.104,
+        "p50": 0,
+        "p95": 7.309,
+        "max": 7.309
+      },
+      "maxStepMetersWithoutGap": 0.2,
+      "maxStepMetersWithGap": 0.4,
+      "meanHostBallAgeMs": {
+        "mean": 51.464,
+        "p50": 50,
+        "p95": 58.084,
+        "max": 58.084
+      }
+    }
+  ],
+  "results": [
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 33.333,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 25.028,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 100,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 25.692,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 100
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 39.042,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 25.028,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 98.533,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 25.692,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 100
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 2,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 48.555,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 26.689,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 50
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 96.089,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 27.243,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 100
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 33.333,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 41.639,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 100,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 42.303,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 2,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 39.042,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 35.327,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 4,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 98.533,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 35.88,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 100
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 2,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 48.555,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.998,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 96.089,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 34.551,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 100
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 33.333,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 41.639,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 100,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 42.303,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 39.042,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 41.639,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 98.533,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 42.303,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 151,
+      "repeats": 150,
+      "repeatPercent": 49.834,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 48.555,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.2,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 41.639,
+        "p50": 33.333,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "legacy-30hz-raw-ball",
+      "streamHz": 30,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 149,
+      "repeats": 152,
+      "repeatPercent": 50.498,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 96.089,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0,
+        "p95": 0.2,
+        "max": 0.6
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 42.303,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 16.667,
+        "p50": 16.667,
+        "p95": 16.667,
+        "max": 16.667
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 298,
+      "repeats": 3,
+      "repeatPercent": 0.997,
+      "longestRepeatedDisplayFrames": 3,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 16.999,
+        "p50": 16.667,
+        "p95": 16.667,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 16.667,
+        "p50": 16.667,
+        "p95": 16.667,
+        "max": 16.667
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 298,
+      "repeats": 3,
+      "repeatPercent": 0.997,
+      "longestRepeatedDisplayFrames": 3,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 16.999,
+        "p50": 16.667,
+        "p95": 16.667,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 276,
+      "repeats": 25,
+      "repeatPercent": 8.306,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 18.162,
+        "p50": 16.667,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 274,
+      "repeats": 27,
+      "repeatPercent": 8.97,
+      "longestRepeatedDisplayFrames": 3,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 18.439,
+        "p50": 16.667,
+        "p95": 33.333,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.333,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 298,
+      "repeats": 3,
+      "repeatPercent": 0.997,
+      "longestRepeatedDisplayFrames": 3,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.666,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 83.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 237,
+      "repeats": 64,
+      "repeatPercent": 21.262,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 26.744,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 236,
+      "repeats": 65,
+      "repeatPercent": 21.595,
+      "longestRepeatedDisplayFrames": 2,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 26.966,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 234,
+      "repeats": 67,
+      "repeatPercent": 22.259,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 25.305,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 233,
+      "repeats": 68,
+      "repeatPercent": 22.591,
+      "longestRepeatedDisplayFrames": 2,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 25.581,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.333,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 298,
+      "repeats": 3,
+      "repeatPercent": 0.997,
+      "longestRepeatedDisplayFrames": 3,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.666,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 83.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.333,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 298,
+      "repeats": 3,
+      "repeatPercent": 0.997,
+      "longestRepeatedDisplayFrames": 3,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.666,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 83.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.333,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 33.333
+      }
+    },
+    {
+      "mode": "60hz-raw-ball",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 298,
+      "repeats": 3,
+      "repeatPercent": 0.997,
+      "longestRepeatedDisplayFrames": 3,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 33.666,
+        "p50": 33.333,
+        "p95": 33.333,
+        "max": 83.333
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 35,
+        "p50": 35,
+        "p95": 35,
+        "max": 35
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 300,
+      "repeats": 1,
+      "repeatPercent": 0.332,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.104,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 36.069,
+        "p50": 35,
+        "p95": 41.672,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.102,
+        "max": 0.103
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 34.978,
+        "p50": 34.98,
+        "p95": 35.676,
+        "max": 36.247
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 300,
+      "repeats": 1,
+      "repeatPercent": 0.332,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.105,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 36.062,
+        "p50": 35.123,
+        "p95": 41.159,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.105,
+        "max": 0.106
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 34.397,
+        "p50": 34.433,
+        "p95": 36.003,
+        "max": 37.089
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 300,
+      "repeats": 1,
+      "repeatPercent": 0.332,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.106,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 35.588,
+        "p50": 34.73,
+        "p95": 40.693,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 42.5,
+        "p50": 42.5,
+        "p95": 42.5,
+        "max": 42.5
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 299,
+      "repeats": 2,
+      "repeatPercent": 0.664,
+      "longestRepeatedDisplayFrames": 2,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.107,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 44.081,
+        "p50": 42.5,
+        "p95": 52.776,
+        "max": 83.333
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.102,
+        "max": 0.102
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 41.811,
+        "p50": 41.784,
+        "p95": 42.702,
+        "max": 43.429
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 300,
+      "repeats": 1,
+      "repeatPercent": 0.332,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.104,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 42.6,
+        "p50": 42.003,
+        "p95": 46.213,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.104,
+        "max": 0.106
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 40.569,
+        "p50": 40.44,
+        "p95": 42.946,
+        "max": 45.14
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 300,
+      "repeats": 1,
+      "repeatPercent": 0.332,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.101,
+        "p95": 0.105,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 41.443,
+        "p50": 40.83,
+        "p95": 45.14,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50,
+        "p50": 50,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 299,
+      "repeats": 2,
+      "repeatPercent": 0.664,
+      "longestRepeatedDisplayFrames": 2,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.105,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 51.149,
+        "p50": 50,
+        "p95": 57.217,
+        "max": 83.333
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.102,
+        "max": 0.103
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 49.983,
+        "p50": 49.983,
+        "p95": 50.676,
+        "max": 51.247
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 300,
+      "repeats": 1,
+      "repeatPercent": 0.332,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.105,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 51.15,
+        "p50": 50.132,
+        "p95": 56.732,
+        "max": 83.333
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.105,
+        "max": 0.107
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 49.955,
+        "p50": 49.954,
+        "p95": 51.803,
+        "max": 53.324
+      }
+    },
+    {
+      "mode": "current-60hz-host-interpolation-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 300,
+      "repeats": 1,
+      "repeatPercent": 0.332,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.101,
+        "p95": 0.107,
+        "max": 0.115
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 51.174,
+        "p50": 50.31,
+        "p95": 56.214,
+        "max": 83.333
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50,
+        "p50": 50,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 297,
+      "repeats": 4,
+      "repeatPercent": 1.329,
+      "longestRepeatedDisplayFrames": 4,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50.775,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50,
+        "p50": 50,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 297,
+      "repeats": 4,
+      "repeatPercent": 1.329,
+      "longestRepeatedDisplayFrames": 4,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50.72,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 288,
+      "repeats": 13,
+      "repeatPercent": 4.319,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 47.01,
+        "p50": 50,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 10,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 287,
+      "repeats": 14,
+      "repeatPercent": 4.651,
+      "longestRepeatedDisplayFrames": 4,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 48.45,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50,
+        "p50": 50,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 296,
+      "repeats": 5,
+      "repeatPercent": 1.661,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 51.717,
+        "p50": 50,
+        "p95": 66.667,
+        "max": 133.333
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50,
+        "p50": 50,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 297,
+      "repeats": 4,
+      "repeatPercent": 1.329,
+      "longestRepeatedDisplayFrames": 4,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50.886,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50,
+        "p50": 50,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 17.5,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 297,
+      "repeats": 4,
+      "repeatPercent": 1.329,
+      "longestRepeatedDisplayFrames": 4,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50.775,
+        "p50": 50,
+        "p95": 50,
+        "max": 116.667
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 301,
+      "repeats": 0,
+      "repeatPercent": 0,
+      "longestRepeatedDisplayFrames": 0,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 16.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.1
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 50,
+        "p50": 50,
+        "p95": 50,
+        "max": 50
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 0,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 296,
+      "repeats": 5,
+      "repeatPercent": 1.661,
+      "longestRepeatedDisplayFrames": 5,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 66.667,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.1,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 60.576,
+        "p50": 66.667,
+        "p95": 66.667,
+        "max": 133.333
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 279,
+      "repeats": 22,
+      "repeatPercent": 7.309,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 22.375,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 58.084,
+        "p50": 50,
+        "p95": 66.667,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 3,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 278,
+      "repeats": 23,
+      "repeatPercent": 7.641,
+      "longestRepeatedDisplayFrames": 4,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 65.294,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 60.52,
+        "p50": 66.667,
+        "p95": 66.667,
+        "max": 133.333
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": false,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 279,
+      "repeats": 22,
+      "repeatPercent": 7.309,
+      "longestRepeatedDisplayFrames": 1,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 31.889,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 58.084,
+        "p50": 50,
+        "p95": 66.667,
+        "max": 66.667
+      }
+    },
+    {
+      "mode": "candidate-60hz-exact-snapshot-playout-25ms",
+      "streamHz": 60,
+      "baseOneWayLatencyMs": 25,
+      "jitterAmplitudeMs": 8,
+      "shortPacketGap": true,
+      "displaySamples": 301,
+      "distinctDisplayedPoses": 278,
+      "repeats": 23,
+      "repeatPercent": 7.641,
+      "longestRepeatedDisplayFrames": 4,
+      "rejectedOutOfOrder": 0,
+      "biggestInputGapMs": 63.006,
+      "displayedStepMeters": {
+        "mean": 0.1,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.4
+      },
+      "hostBallTimestampAgeMs": {
+        "mean": 60.354,
+        "p50": 66.667,
+        "p95": 66.667,
+        "max": 133.333
+      }
+    }
+  ]
+}

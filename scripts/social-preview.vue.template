@@ -1,0 +1,55 @@
+<script setup lang="ts">
+// Copy to app/pages/__social-preview.vue for a local 1200 × 630 capture; remove before building.
+const stage = ref<HTMLElement>();
+let animation = 0;
+let dispose: (() => void) | undefined;
+let stopped = false;
+onMounted(async () => {
+  const [{ SceneManager }, { DEFAULT_SETTINGS }] = await Promise.all([
+    import('../../game/rendering/SceneManager'), import('../../shared/types'),
+  ]);
+  if (stopped) return;
+  const view = new SceneManager(stage.value!);
+  dispose = () => view.dispose();
+  view.settings({ ...DEFAULT_SETTINGS, graphics: 'high' });
+  view.camera.fov = 40;
+  view.camera.position.set(3.3, 3.6, 3.6);
+  view.camera.lookAt(0, 0.05, 0);
+  view.camera.updateProjectionMatrix();
+  const camera = view.captureCamera();
+  view.table.ball.position.set(-0.18, 0.04, 0.16);
+  view.table.rods.forEach((rod, index) => { rod.rotation.z = index % 2 ? -.2 : .12; });
+  const render = () => {
+    if (stopped) return;
+    view.render(1 / 60, 'playing', undefined, camera);
+    animation = requestAnimationFrame(render);
+  };
+  render();
+});
+onBeforeUnmount(() => { stopped = true; cancelAnimationFrame(animation); dispose?.(); });
+</script>
+<template>
+  <main class="social-art">
+    <img src="/branding/nembestil-bold.svg" class="social-logo" alt="Nem Bold" />
+    <div class="social-copy">
+      <p class="social-eyebrow">DIT EGET FODBOLDBORD.</p>
+      <h1>Tag kampen<br /><em>til bordet.</em></h1>
+      <p class="social-description">Spil alene. Invitér vennerne.</p>
+    </div>
+    <div ref="stage" class="social-table" />
+    <footer><span>GRATIS · 1–4 SPILLERE · INGEN KONTO</span><span>bold.nembestil.dk</span></footer>
+  </main>
+</template>
+<style scoped>
+.social-art { position: relative; width: 1200px; height: 630px; overflow: hidden; background: radial-gradient(ellipse at 77% 43%, #2c3c27 0%, #1b261a 35%, #121812 72%); color: #f1f2e7; font-family: Arial, sans-serif; }
+.social-logo { position: absolute; top: 42px; left: 56px; width: 126px; height: auto; }
+.social-copy { position: absolute; left: 56px; top: 200px; z-index: 2; }
+.social-eyebrow { color: #a6b394; font-size: 11px; font-weight: 700; letter-spacing: 2px; margin: 0 0 17px; }
+.social-copy h1 { font-size: 66px; line-height: 1.02; font-weight: 800; letter-spacing: -3px; margin: 0; }
+.social-copy em { font-family: Georgia, serif; font-weight: 400; color: #d3ed67; }
+.social-description { color: #bbc7b0; font-size: 18px; margin: 25px 0 0; }
+.social-table { position: absolute; right: 6px; top: 14px; width: 775px; height: 560px; }
+.social-art footer { position: absolute; left: 56px; right: 56px; bottom: 38px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #d3ed6724; padding-top: 20px; }
+.social-art footer span:first-child { color: #d3ed67; font-size: 11px; letter-spacing: 1.4px; font-weight: 700; }
+.social-art footer span:last-child { color: #a6b394; font-size: 15px; }
+</style>

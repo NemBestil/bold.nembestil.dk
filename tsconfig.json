@@ -1,0 +1,4 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "exclude": ["node_modules", ".output", "functions", "tests/turn-endpoint.test.ts"]
+}

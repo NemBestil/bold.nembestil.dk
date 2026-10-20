@@ -1,0 +1,41 @@
+{
+  "name": "nem-bold",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev --host 0.0.0.0",
+    "build": "nuxt generate",
+    "deploy": "npm run build && wrangler pages deploy --project-name nemfuss --branch main",
+    "preview:pages": "wrangler pages dev",
+    "preview": "npx serve .output/public -l 3000",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck && tsc -p functions/tsconfig.json",
+    "types:cloudflare": "wrangler types functions/worker-configuration.d.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "^0.19.0",
+    "@iconify-json/lucide": "^1.2.0",
+    "@nuxt/ui": "^4.0.0",
+    "@nuxtjs/i18n": "^10.6.0",
+    "@nuxtjs/seo": "^6.0.1",
+    "nuxt": "^4.0.0",
+    "peerjs": "^1.5.5",
+    "qrcode": "^1.5.4",
+    "tailwindcss": "^4.0.0",
+    "three": "^0.180.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/three": "^0.180.0",
+    "sharp": "^0.35.5",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.5",
+    "vue-tsc": "^3.0.0",
+    "wrangler": "^4.151.1"
+  }
+}
